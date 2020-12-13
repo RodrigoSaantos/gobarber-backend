@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import UpdateProfileService from '@modules/users/services/UpdateProfileService';
 import ShowProfileService from '@modules/users/services/ShowProfileService';
+import { classToClass } from 'class-transformer';
 
 export default class ProfileController {
   public async show(request: Request, response: Response): Promise<Response> {
@@ -11,16 +12,16 @@ export default class ProfileController {
 
     const user = await showProfile.execute({ user_id });
 
-    const userWithoutPassword = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      avatar: user.avatar,
-      created_at: user.created_at,
-      updated_at: user.updated_at,
-    };
+    // const userWithoutPassword = {
+    //   id: user.id,
+    //   name: user.name,
+    //   email: user.email,
+    //   avatar: user.avatar,
+    //   created_at: user.created_at,
+    //   updated_at: user.updated_at,
+    // };
 
-    return response.json(userWithoutPassword);
+    return response.json(classToClass(user));
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
@@ -38,16 +39,16 @@ export default class ProfileController {
         password,
       });
 
-      const userWithoutPassword = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        avatar: user.avatar,
-        created_at: user.created_at,
-        updated_at: user.updated_at,
-      };
+      // const userWithoutPassword = {
+      //   id: user.id,
+      //   name: user.name,
+      //   email: user.email,
+      //   avatar: user.avatar,
+      //   created_at: user.created_at,
+      //   updated_at: user.updated_at,
+      // };
 
-      return response.json(userWithoutPassword);
+      return response.json(classToClass(user));
     } catch (err) {
       return response.status(400).json({ error: err.message });
     }
